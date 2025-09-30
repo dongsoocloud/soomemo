@@ -199,7 +199,7 @@ function AppContent() {
           <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg mx-auto mb-4">
             <span className="text-white font-bold text-2xl">📝</span>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">秀메모</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2"><span className="text-pink-500">秀</span>메모</h2>
           <p className="text-gray-600">로딩 중...</p>
         </div>
       </div>
@@ -216,7 +216,7 @@ function AppContent() {
                 <span className="text-white font-bold text-lg">📝</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                秀메모
+                <span className="text-pink-500">秀</span>메모
               </h1>
             </div>
             <div className="flex items-center gap-4 w-full lg:w-auto">
@@ -304,7 +304,7 @@ function AppContent() {
             <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
               <span className="text-5xl">📝</span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to 秀메모!</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to <span className="text-pink-500">秀</span>메모!</h2>
             <p className="text-gray-600 mb-8 text-lg">
               로그인하여 개인 메모를 작성하고 관리해보세요.
             </p>
