@@ -40,45 +40,45 @@ const syncDatabase = async () => {
     }
     
     // 원시 SQL로 테이블 생성 (외래키 의존성 고려)
-    console.log('👤 Users 테이블 생성...');
+    console.log('👤 users 테이블 생성...');
     await sequelize.query(`
-      CREATE TABLE IF NOT EXISTS "Users" (
-        "id" SERIAL PRIMARY KEY,
-        "username" VARCHAR(255) NOT NULL UNIQUE,
-        "email" VARCHAR(255) NOT NULL UNIQUE,
-        "password" VARCHAR(255) NOT NULL,
-        "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-        "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) NOT NULL UNIQUE,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
       );
     `);
-    console.log('✅ Users 테이블 생성 완료');
+    console.log('✅ users 테이블 생성 완료');
     
-    console.log('📁 Categories 테이블 생성...');
+    console.log('📁 categories 테이블 생성...');
     await sequelize.query(`
-      CREATE TABLE IF NOT EXISTS "Categories" (
-        "id" SERIAL PRIMARY KEY,
-        "name" VARCHAR(255) NOT NULL,
-        "color" VARCHAR(255) NOT NULL DEFAULT '#6c757d',
-        "user_id" INTEGER NOT NULL REFERENCES "Users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-        "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-        "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+      CREATE TABLE IF NOT EXISTS categories (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        color VARCHAR(255) NOT NULL DEFAULT '#6c757d',
+        user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
       );
     `);
-    console.log('✅ Categories 테이블 생성 완료');
+    console.log('✅ categories 테이블 생성 완료');
     
-    console.log('📝 Memos 테이블 생성...');
+    console.log('📝 memos 테이블 생성...');
     await sequelize.query(`
-      CREATE TABLE IF NOT EXISTS "Memos" (
-        "id" SERIAL PRIMARY KEY,
-        "title" VARCHAR(255) NOT NULL,
-        "content" TEXT NOT NULL,
-        "user_id" INTEGER NOT NULL REFERENCES "Users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-        "category_id" INTEGER NOT NULL REFERENCES "Categories" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-        "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-        "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+      CREATE TABLE IF NOT EXISTS memos (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        content TEXT NOT NULL,
+        user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        category_id INTEGER NOT NULL REFERENCES categories (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
       );
     `);
-    console.log('✅ Memos 테이블 생성 완료');
+    console.log('✅ memos 테이블 생성 완료');
     
     console.log('✅ 데이터베이스가 성공적으로 동기화되었습니다.');
     

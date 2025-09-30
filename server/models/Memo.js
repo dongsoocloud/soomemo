@@ -37,6 +37,8 @@ const Memo = sequelize.define('Memo', {
       key: 'id'
     }
   }
+}, {
+  tableName: 'memos'
 });
 
 module.exports = Memo;

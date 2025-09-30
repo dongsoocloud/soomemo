@@ -31,6 +31,8 @@ const Category = sequelize.define('Category', {
       key: 'id'
     }
   }
+}, {
+  tableName: 'categories'
 });
 
 module.exports = Category;
