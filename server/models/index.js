@@ -60,6 +60,7 @@ const syncDatabase = async () => {
         name VARCHAR(255) NOT NULL,
         color VARCHAR(255) NOT NULL DEFAULT '#6c757d',
         user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        "order" INTEGER NOT NULL DEFAULT 0,
         created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
       );
@@ -74,11 +75,36 @@ const syncDatabase = async () => {
         content TEXT NOT NULL,
         user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
         category_id INTEGER NOT NULL REFERENCES categories (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        "order" INTEGER NOT NULL DEFAULT 0,
         created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
       );
     `);
     console.log('✅ memos 테이블 생성 완료');
+    
+    // 기존 테이블에 order 컬럼 추가 (마이그레이션)
+    console.log('🔄 기존 테이블에 order 컬럼 추가 중...');
+    try {
+      // categories 테이블에 order 컬럼 추가
+      await sequelize.query(`
+        ALTER TABLE categories 
+        ADD COLUMN IF NOT EXISTS "order" INTEGER NOT NULL DEFAULT 0;
+      `);
+      console.log('✅ categories 테이블에 order 컬럼 추가 완료');
+    } catch (error) {
+      console.log('⚠️ categories order 컬럼 추가 실패 (이미 존재할 수 있음):', error.message);
+    }
+    
+    try {
+      // memos 테이블에 order 컬럼 추가
+      await sequelize.query(`
+        ALTER TABLE memos 
+        ADD COLUMN IF NOT EXISTS "order" INTEGER NOT NULL DEFAULT 0;
+      `);
+      console.log('✅ memos 테이블에 order 컬럼 추가 완료');
+    } catch (error) {
+      console.log('⚠️ memos order 컬럼 추가 실패 (이미 존재할 수 있음):', error.message);
+    }
     
     console.log('✅ 데이터베이스가 성공적으로 동기화되었습니다.');
     
