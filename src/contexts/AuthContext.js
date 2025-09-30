@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI } from '../services/api';
+import { authAPI, setForceLogout } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -73,12 +73,26 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // 강제 로그아웃 (토큰 만료 시)
+  const forceLogout = () => {
+    console.log('🔑 강제 로그아웃 실행');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  // API 서비스에 강제 로그아웃 함수 등록
+  useEffect(() => {
+    setForceLogout(forceLogout);
+  }, []);
+
   const value = {
     user,
     loading,
     login,
     register,
     logout,
+    forceLogout,
     isAuthenticated: !!user,
   };
 

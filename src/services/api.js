@@ -2,6 +2,12 @@ const API_BASE_URL = process.env.NODE_ENV === 'production'
   ? 'https://soomemo-production.up.railway.app/api'
   : 'http://localhost:5000/api';
 
+// 강제 로그아웃 함수 (AuthContext에서 주입)
+let forceLogout = null;
+export const setForceLogout = (fn) => {
+  forceLogout = fn;
+};
+
 // 토큰 가져오기
 const getToken = () => localStorage.getItem('token');
 
@@ -33,9 +39,16 @@ const apiRequest = async (endpoint, options = {}) => {
   if (!response.ok) {
     if (response.status === 401) {
       // 토큰이 만료되었거나 유효하지 않은 경우
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.reload();
+      // 로그인 API가 아닌 경우에만 강제 로그아웃
+      if (!endpoint.includes('/auth/login') && !endpoint.includes('/auth/register')) {
+        if (forceLogout) {
+          forceLogout();
+        } else {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
+        console.log('🔑 토큰 만료로 인한 로그아웃');
+      }
     }
     const errorData = await response.json();
     console.error('❌ API 오류:', errorData);
