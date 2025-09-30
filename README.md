@@ -1,196 +1,290 @@
-# 메모앱 (Memo App)
+# 📝 SooMemo - Personal Memo Management App
 
-개인 메모 작성 및 관리 애플리케이션입니다. 사용자 인증, 카테고리 관리, 메모 CRUD 기능을 제공합니다.
+A modern, full-stack personal memo management application with drag-and-drop functionality, built with React and Node.js.
 
-## 주요 기능
+## ✨ Features
 
-- 🔐 **사용자 인증**: 회원가입, 로그인, 로그아웃
-- 📝 **메모 관리**: 메모 작성, 수정, 삭제, 조회
-- 📂 **카테고리 관리**: 메모 분류 및 카테고리 관리
-- 🔍 **검색 기능**: 제목과 내용으로 메모 검색
-- 💾 **데이터베이스**: SQLite를 사용한 데이터 영구 저장
-- 🎨 **반응형 UI**: Tailwind CSS를 사용한 모던한 디자인
+### 🔐 Authentication & Security
+- **User Registration & Login**: Secure JWT-based authentication
+- **Password Hashing**: bcrypt encryption for password security
+- **Input Validation**: Comprehensive client and server-side validation
+- **Error Handling**: Detailed validation error messages
 
-## 기술 스택
+### 📝 Memo Management
+- **CRUD Operations**: Create, read, update, and delete memos
+- **Rich Text Editor**: Clean, intuitive memo editing interface
+- **Search Functionality**: Search through titles and content
+- **Category Filtering**: Filter memos by categories
 
-### 프론트엔드
-- React 19.1.1
-- Tailwind CSS
-- Axios (HTTP 클라이언트)
+### 📂 Category Management
+- **Drag & Drop Reordering**: Intuitive category sorting with @dnd-kit
+- **Color Coding**: Visual category identification with custom colors
+- **Default Category**: Automatic "기본" (Default) category creation
+- **Category CRUD**: Full category management capabilities
 
-### 백엔드
-- Node.js
-- Express.js
-- Sequelize (ORM)
-- SQLite (데이터베이스)
-- JWT (인증)
-- bcryptjs (비밀번호 암호화)
+### 🎨 User Interface
+- **Responsive Design**: Mobile-first design with Tailwind CSS
+- **Modern UI**: Beautiful gradient backgrounds and smooth animations
+- **Mobile Navigation**: Bottom navigation bar for mobile devices
+- **Modal System**: Clean modal dialogs for editing and authentication
 
-## 설치 및 실행
+### 🚀 Performance & Deployment
+- **Production Ready**: Deployed on Railway with PostgreSQL
+- **Database Migration**: Automatic table creation and synchronization
+- **Environment Configuration**: Separate development and production settings
 
-### 1. 의존성 설치
+## 🛠️ Tech Stack
+
+### Frontend
+- **React 19.1.1** - Modern React with hooks
+- **Tailwind CSS** - Utility-first CSS framework
+- **@dnd-kit** - Drag and drop functionality
+- **Axios** - HTTP client for API calls
+- **Context API** - State management
+
+### Backend
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web framework
+- **Sequelize** - SQL ORM
+- **PostgreSQL** - Production database
+- **SQLite** - Development database
+- **JWT** - Authentication tokens
+- **bcryptjs** - Password hashing
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/your-username/soomemo.git
+cd soomemo
+```
+
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-### 2. 환경 변수 설정
-프로젝트 루트에 `.env` 파일을 생성하고 다음 내용을 추가하세요:
-
-```bash
-# .env.example 파일을 복사하여 .env 파일 생성
-cp .env.example .env
-```
-
-또는 직접 `.env` 파일을 생성하고 다음 내용을 추가하세요:
-
+3. **Environment Setup**
+Create a `.env` file in the root directory:
 ```env
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 NODE_ENV=development
 PORT=5000
 ```
 
-**⚠️ 주의**: JWT_SECRET은 반드시 강력한 비밀키로 변경하세요!
+4. **Run the application**
 
-### 3. 개발 서버 실행
-
-#### 백엔드 서버만 실행
-```bash
-npm run server
-```
-
-#### 프론트엔드만 실행
-```bash
-npm start
-```
-
-#### 백엔드와 프론트엔드를 동시에 실행
+#### Development Mode (Recommended)
 ```bash
 npm run dev
 ```
+This runs both frontend (port 3000) and backend (port 5000) simultaneously.
 
-### 4. 애플리케이션 접속
-- 프론트엔드: http://localhost:3000
-- 백엔드 API: http://localhost:5000
+#### Individual Services
+```bash
+# Backend only
+npm run server
 
-## 사용법
+# Frontend only
+npm start
+```
 
-### 1. 회원가입/로그인
-- 처음 사용하는 경우 "회원가입" 버튼을 클릭하여 계정을 생성하세요.
-- 기존 사용자는 "로그인" 버튼을 클릭하여 로그인하세요.
+5. **Access the application**
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
 
-### 2. 메모 작성
-- 로그인 후 "새 메모" 버튼을 클릭하여 메모를 작성하세요.
-- 제목과 내용을 입력하고 카테고리를 선택한 후 저장하세요.
+## 📱 Usage Guide
 
-### 3. 메모 관리
-- 메모 목록에서 메모를 클릭하여 수정할 수 있습니다.
-- 삭제 버튼을 클릭하여 메모를 삭제할 수 있습니다.
+### Getting Started
+1. **Sign Up**: Create a new account with username, email, and password
+2. **Login**: Access your account with email and password
+3. **Create Memos**: Click the "+" button to create new memos
+4. **Organize**: Use categories to organize your memos
+5. **Search**: Use the search bar to find specific memos
 
-### 4. 카테고리 관리
-- 사이드바에서 카테고리를 추가, 수정, 삭제할 수 있습니다.
-- 카테고리별로 메모를 필터링할 수 있습니다.
+### Category Management
+- **Drag & Drop**: Drag categories by the ⋮⋮ handle to reorder them
+- **Add Categories**: Click the "+" button in the sidebar
+- **Edit Categories**: Hover over a category and click the edit button
+- **Delete Categories**: Hover over a category and click the delete button
 
-### 5. 검색
-- 헤더의 검색창을 사용하여 메모를 검색할 수 있습니다.
+### Mobile Experience
+- **Bottom Navigation**: Use the bottom navigation bar on mobile
+- **Touch-Friendly**: Optimized for touch interactions
+- **Responsive Layout**: Adapts to different screen sizes
 
-## API 엔드포인트
+## 🔌 API Endpoints
 
-### 인증
-- `POST /api/auth/register` - 회원가입
-- `POST /api/auth/login` - 로그인
-- `GET /api/auth/me` - 사용자 정보 조회
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user info
 
-### 메모
-- `GET /api/memos` - 메모 목록 조회
-- `GET /api/memos/:id` - 특정 메모 조회
-- `POST /api/memos` - 메모 생성
-- `PUT /api/memos/:id` - 메모 수정
-- `DELETE /api/memos/:id` - 메모 삭제
+### Memos
+- `GET /api/memos` - Get all memos
+- `GET /api/memos/:id` - Get specific memo
+- `POST /api/memos` - Create new memo
+- `PUT /api/memos/:id` - Update memo
+- `DELETE /api/memos/:id` - Delete memo
+- `PUT /api/memos/reorder` - Reorder memos
 
-### 카테고리
-- `GET /api/categories` - 카테고리 목록 조회
-- `POST /api/categories` - 카테고리 생성
-- `PUT /api/categories/:id` - 카테고리 수정
-- `DELETE /api/categories/:id` - 카테고리 삭제
+### Categories
+- `GET /api/categories` - Get all categories
+- `POST /api/categories` - Create new category
+- `PUT /api/categories/:id` - Update category
+- `DELETE /api/categories/:id` - Delete category
+- `PUT /api/categories/reorder` - Reorder categories
 
-## 프로젝트 구조
+## 🗄️ Database Schema
+
+### Users Table
+```sql
+- id (Primary Key, Auto Increment)
+- username (Unique, 3-20 characters)
+- email (Unique, Valid email format)
+- password (Hashed with bcrypt)
+- created_at, updated_at (Timestamps)
+```
+
+### Categories Table
+```sql
+- id (Primary Key, Auto Increment)
+- name (Category name)
+- color (Hex color code)
+- user_id (Foreign Key to Users)
+- order (Sort order, default: 0)
+- created_at, updated_at (Timestamps)
+```
+
+### Memos Table
+```sql
+- id (Primary Key, Auto Increment)
+- title (Memo title)
+- content (Memo content)
+- user_id (Foreign Key to Users)
+- category_id (Foreign Key to Categories)
+- order (Sort order, default: 0)
+- created_at, updated_at (Timestamps)
+```
+
+## 🏗️ Project Structure
 
 ```
-memo-app/
-├── public/                 # 정적 파일
-├── src/                   # React 소스 코드
-│   ├── components/        # React 컴포넌트
+soomemo/
+├── public/                 # Static files
+├── src/                   # React source code
+│   ├── components/        # React components
+│   │   ├── AuthModal.js   # Authentication modal
+│   │   ├── CategorySidebar.js # Category management
+│   │   ├── MemoEditor.js  # Memo editing
+│   │   ├── MemoList.js    # Memo listing
+│   │   └── MobileBottomNav.js # Mobile navigation
 │   ├── contexts/          # React Context
-│   ├── services/          # API 서비스
-│   └── ...
-├── server/                # 백엔드 서버
-│   ├── config/           # 데이터베이스 설정
-│   ├── models/           # Sequelize 모델
-│   ├── routes/           # API 라우트
-│   ├── middleware/       # 미들웨어
-│   └── ...
-└── package.json
+│   │   └── AuthContext.js # Authentication context
+│   ├── services/          # API services
+│   │   └── api.js         # API client
+│   └── App.js            # Main application
+├── server/                # Backend server
+│   ├── config/           # Database configuration
+│   │   └── database.js   # Sequelize setup
+│   ├── models/           # Database models
+│   │   ├── User.js       # User model
+│   │   ├── Category.js   # Category model
+│   │   └── Memo.js       # Memo model
+│   ├── routes/           # API routes
+│   │   ├── auth.js       # Authentication routes
+│   │   ├── categories.js # Category routes
+│   │   └── memos.js      # Memo routes
+│   ├── middleware/       # Express middleware
+│   │   └── auth.js       # JWT authentication
+│   └── index.js          # Server entry point
+├── package.json          # Dependencies
+└── README.md             # This file
 ```
 
-## 데이터베이스 스키마
+## 🔒 Security Features
 
-### Users 테이블
-- id (Primary Key)
-- username (Unique)
-- email (Unique)
-- password (Hashed)
-- createdAt, updatedAt
+- **JWT Authentication**: Secure token-based authentication
+- **Password Hashing**: bcrypt with salt rounds
+- **Input Validation**: Server-side validation for all inputs
+- **CORS Protection**: Configured for specific origins
+- **SQL Injection Prevention**: Sequelize ORM protection
+- **Error Handling**: Secure error messages without data leakage
 
-### Categories 테이블
-- id (Primary Key)
-- name
-- color
-- userId (Foreign Key)
-- createdAt, updatedAt
+## 🌐 Deployment
 
-### Memos 테이블
-- id (Primary Key)
-- title
-- content
-- userId (Foreign Key)
-- categoryId (Foreign Key)
-- createdAt, updatedAt
+### Railway Deployment
+The application is deployed on Railway with the following configuration:
 
-## 보안 기능
+1. **Environment Variables**:
+   - `DATABASE_URL`: PostgreSQL connection string
+   - `JWT_SECRET`: JWT signing secret
+   - `NODE_ENV`: production
 
-- JWT 토큰 기반 인증
-- bcrypt를 사용한 비밀번호 해싱
-- CORS 설정
-- 입력 데이터 검증
-- SQL 인젝션 방지 (Sequelize ORM 사용)
+2. **Database**: PostgreSQL on Railway
+3. **Build Process**: Automatic build and deployment
+4. **Domain**: https://soomemo-production.up.railway.app
 
-## 개발 모드 vs 프로덕션 모드
+### Local Development vs Production
 
-### 개발 모드
-- React 개발 서버: http://localhost:3000
-- Express API 서버: http://localhost:5000
-- SQLite 데이터베이스 파일: `server/database.sqlite`
+| Feature | Development | Production |
+|---------|-------------|------------|
+| Database | SQLite | PostgreSQL |
+| Frontend | React Dev Server | Built Static Files |
+| Backend | Express Dev Server | Express Production Server |
+| Environment | `NODE_ENV=development` | `NODE_ENV=production` |
 
-### 프로덕션 모드
-- `npm run build`로 React 앱 빌드
-- Express 서버가 정적 파일 서빙
-- 환경 변수 `NODE_ENV=production` 설정
+## 🐛 Troubleshooting
 
-## 문제 해결
+### Common Issues
 
-### 서버가 시작되지 않는 경우
-1. 포트 5000이 사용 중인지 확인
-2. `.env` 파일이 올바르게 설정되었는지 확인
-3. `npm install`로 의존성이 모두 설치되었는지 확인
+**Server won't start**
+- Check if port 5000 is available
+- Verify `.env` file configuration
+- Ensure all dependencies are installed with `npm install`
 
-### 데이터베이스 오류
-1. `server/database.sqlite` 파일 권한 확인
-2. Sequelize 모델 관계 설정 확인
+**Database connection errors**
+- Verify database configuration
+- Check if database file exists (SQLite)
+- Ensure PostgreSQL connection string (Production)
 
-### 인증 오류
-1. JWT_SECRET이 설정되었는지 확인
-2. 토큰 만료 시간 확인
+**Authentication issues**
+- Verify JWT_SECRET is set
+- Check token expiration
+- Clear localStorage and try again
 
-## 라이선스
+**Drag and drop not working**
+- Ensure @dnd-kit is properly installed
+- Check browser compatibility
+- Verify touch events on mobile
 
-MIT License
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [React](https://reactjs.org/) - Frontend framework
+- [Express.js](https://expressjs.com/) - Backend framework
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [@dnd-kit](https://dndkit.com/) - Drag and drop library
+- [Sequelize](https://sequelize.org/) - SQL ORM
+- [Railway](https://railway.app/) - Deployment platform
+
+---
+
+**Made with ❤️ by [Your Name]**
