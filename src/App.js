@@ -10,7 +10,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { memoAPI, categoryAPI } from './services/api';
 
 function AppContent() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, loading: authLoading } = useAuth();
   const [memos, setMemos] = useState([]);
   const [editingMemo, setEditingMemo] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -175,6 +175,21 @@ function AppContent() {
       loadData();
     }, 100);
   };
+
+  // 인증 로딩 중일 때 로딩 화면 표시
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg mx-auto mb-4">
+            <span className="text-white font-bold text-2xl">📝</span>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">秀메모</h2>
+          <p className="text-gray-600">로딩 중...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
