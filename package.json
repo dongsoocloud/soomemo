@@ -29,7 +29,8 @@
     "eject": "react-scripts eject",
     "server": "node server/index.js",
     "dev": "concurrently \"npm run server\" \"npm start\"",
-    "start:prod": "npm run build && npm run server"
+    "start:prod": "npm run build && npm run server",
+    "start:railway": "npm run server"
   },
   "eslintConfig": {
     "extends": [
