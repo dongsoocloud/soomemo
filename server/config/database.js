@@ -7,7 +7,10 @@ if (process.env.NODE_ENV === 'production' && process.env.DATABASE_URL) {
   // 프로덕션 환경 (Railway)
   console.log('🐘 PostgreSQL 데이터베이스 연결 시도:', {
     NODE_ENV: process.env.NODE_ENV,
-    DATABASE_URL: process.env.DATABASE_URL ? '설정됨' : '없음'
+    DATABASE_URL: process.env.DATABASE_URL ? '설정됨' : '없음',
+    PGHOST: process.env.PGHOST || '없음',
+    PGPORT: process.env.PGPORT || '없음',
+    PGDATABASE: process.env.PGDATABASE || '없음'
   });
   
   sequelize = new Sequelize(process.env.DATABASE_URL, {
