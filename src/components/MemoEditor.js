@@ -40,16 +40,18 @@ const MemoEditor = ({ memo, onSave, onCancel, isCreating, categories, onCategory
 
   return (
     <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/30 flex flex-col w-full h-full max-h-[90vh] overflow-hidden animate-in fade-in-0 zoom-in-95 duration-300" onKeyDown={handleKeyDown}>
-      <div className="flex justify-between items-center p-6 border-b border-gray-100/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 rounded-t-2xl">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
-            <span className="text-white text-lg">✏️</span>
+      {/* 헤더 - 모바일에서는 간소화 */}
+      <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-100/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 rounded-t-2xl">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
+            <span className="text-white text-sm sm:text-lg">✏️</span>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800">
+          <h2 className="text-lg sm:text-2xl font-bold text-gray-800">
             {isCreating ? '새 메모 작성' : '메모 수정'}
           </h2>
         </div>
-        <div className="flex gap-3">
+        {/* 데스크톱에서만 상단 버튼 표시 */}
+        <div className="hidden sm:flex gap-3">
           <button 
             className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
             onClick={handleSave}
@@ -116,11 +118,36 @@ const MemoEditor = ({ memo, onSave, onCancel, isCreating, categories, onCategory
         </div>
       </div>
       
-      <div className="p-6 border-t border-gray-100/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30 rounded-b-2xl">
+      {/* 데스크톱 하단 - 단축키 안내 */}
+      <div className="hidden sm:block p-6 border-t border-gray-100/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30 rounded-b-2xl">
         <div className="flex items-center justify-center gap-2 text-gray-500 text-sm">
           <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
           <span className="font-medium">단축키: Ctrl+S (저장), Esc (취소)</span>
           <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
+        </div>
+      </div>
+
+      {/* 모바일 하단 - 저장/취소 버튼 */}
+      <div className="sm:hidden p-4 border-t border-gray-100/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30 rounded-b-2xl">
+        <div className="flex gap-3">
+          <button 
+            className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-4 rounded-xl text-base font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            onClick={handleSave}
+          >
+            <span className="flex items-center justify-center gap-2">
+              <span>💾</span>
+              저장
+            </span>
+          </button>
+          <button 
+            className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-4 rounded-xl text-base font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            onClick={handleCancel}
+          >
+            <span className="flex items-center justify-center gap-2">
+              <span>❌</span>
+              취소
+            </span>
+          </button>
         </div>
       </div>
     </div>

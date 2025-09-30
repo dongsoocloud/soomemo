@@ -28,6 +28,7 @@ function AppContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showMobileCategories, setShowMobileCategories] = useState(false);
 
   // 데이터 로드
   const loadData = useCallback(async () => {
@@ -185,6 +186,11 @@ function AppContent() {
     }, 100);
   };
 
+  // 모바일 카테고리 토글
+  const toggleMobileCategories = () => {
+    setShowMobileCategories(!showMobileCategories);
+  };
+
   // 인증 로딩 중일 때 로딩 화면 표시
   if (authLoading) {
     return (
@@ -271,14 +277,17 @@ function AppContent() {
       
       {isAuthenticated ? (
         <div className="max-w-7xl mx-auto px-4 py-8 md:px-8 flex flex-col lg:flex-row gap-6 min-h-[calc(100vh-80px)] pb-20 sm:pb-8">
-          <CategorySidebar
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategorySelect={setSelectedCategory}
-            onAddCategory={addCategory}
-            onUpdateCategory={updateCategory}
-            onDeleteCategory={deleteCategory}
-          />
+          {/* 데스크톱에서만 항상 표시, 모바일에서는 토글 */}
+          <div className={`${showMobileCategories ? 'block' : 'hidden'} sm:block`}>
+            <CategorySidebar
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onCategorySelect={setSelectedCategory}
+              onAddCategory={addCategory}
+              onUpdateCategory={updateCategory}
+              onDeleteCategory={deleteCategory}
+            />
+          </div>
           
           <MemoList 
             memos={getFilteredMemos()}
@@ -334,7 +343,9 @@ function AppContent() {
       <MobileBottomNav 
         onCreateMemo={createNewMemo}
         onLogout={logout}
+        onToggleCategories={toggleMobileCategories}
         isAuthenticated={isAuthenticated}
+        showCategories={showMobileCategories}
       />
     </div>
   );
