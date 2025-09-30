@@ -29,7 +29,7 @@ const Modal = ({ isOpen, onClose, children }) => {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in-0 duration-300"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in-0 duration-300"
       onClick={handleBackdropClick}
     >
       <div className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden animate-in zoom-in-95 duration-300">

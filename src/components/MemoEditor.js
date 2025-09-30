@@ -128,7 +128,7 @@ const MemoEditor = ({ memo, onSave, onCancel, isCreating, categories, onCategory
       </div>
 
       {/* 모바일 하단 - 저장/취소 버튼 */}
-      <div className="sm:hidden p-4 border-t border-gray-100/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30 rounded-b-2xl">
+      <div className="sm:hidden p-4 pb-20 border-t border-gray-100/50 bg-gradient-to-r from-blue-50/30 to-indigo-50/30 rounded-b-2xl">
         <div className="flex gap-3">
           <button 
             className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-4 rounded-xl text-base font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
