@@ -16,7 +16,19 @@ const apiRequest = async (endpoint, options = {}) => {
     ...options,
   };
 
+  console.log('🌐 API 요청:', {
+    url: `${API_BASE_URL}${endpoint}`,
+    method: options.method || 'GET',
+    headers: config.headers
+  });
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+  
+  console.log('📡 API 응답:', {
+    status: response.status,
+    ok: response.ok,
+    url: response.url
+  });
   
   if (!response.ok) {
     if (response.status === 401) {
@@ -26,10 +38,13 @@ const apiRequest = async (endpoint, options = {}) => {
       window.location.reload();
     }
     const errorData = await response.json();
+    console.error('❌ API 오류:', errorData);
     throw new Error(errorData.message || 'API 요청 실패');
   }
 
-  return response.json();
+  const data = await response.json();
+  console.log('✅ API 성공:', data);
+  return data;
 };
 
 // 인증 관련 API

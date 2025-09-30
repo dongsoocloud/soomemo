@@ -11,6 +11,14 @@ import { memoAPI, categoryAPI } from './services/api';
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading: authLoading } = useAuth();
+  
+  // 디버깅을 위한 로그
+  console.log('🔍 인증 상태:', {
+    user,
+    isAuthenticated,
+    authLoading,
+    token: localStorage.getItem('token')
+  });
   const [memos, setMemos] = useState([]);
   const [editingMemo, setEditingMemo] = useState(null);
   const [isCreating, setIsCreating] = useState(false);

@@ -39,12 +39,18 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      console.log('🔐 로그인 시도:', { email });
       const data = await authAPI.login(email, password);
+      console.log('✅ 로그인 성공:', data);
+      
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       setUser(data.user);
+      
+      console.log('💾 사용자 상태 업데이트:', data.user);
       return data;
     } catch (error) {
+      console.error('❌ 로그인 실패:', error);
       throw error;
     }
   };
