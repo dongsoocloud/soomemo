@@ -68,21 +68,30 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+    
+    console.log('🔐 로그인 요청:', { email, passwordLength: password?.length });
 
     // 입력 검증
     if (!email || !password) {
+      console.log('❌ 입력 검증 실패:', { email: !!email, password: !!password });
       return res.status(400).json({ message: '이메일과 비밀번호를 입력해주세요.' });
     }
 
     // 사용자 찾기
     const user = await User.findOne({ where: { email } });
+    console.log('👤 사용자 찾기:', { found: !!user, userId: user?.id });
+    
     if (!user) {
+      console.log('❌ 사용자 없음:', { email });
       return res.status(401).json({ message: '이메일 또는 비밀번호가 올바르지 않습니다.' });
     }
 
     // 비밀번호 검증
     const isValidPassword = await user.validatePassword(password);
+    console.log('🔑 비밀번호 검증:', { isValid: isValidPassword });
+    
     if (!isValidPassword) {
+      console.log('❌ 비밀번호 불일치:', { email });
       return res.status(401).json({ message: '이메일 또는 비밀번호가 올바르지 않습니다.' });
     }
 
@@ -92,6 +101,8 @@ router.post('/login', async (req, res) => {
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '7d' }
     );
+
+    console.log('✅ 로그인 성공:', { userId: user.id, username: user.username });
 
     res.json({
       message: '로그인이 완료되었습니다.',
@@ -103,7 +114,7 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('로그인 오류:', error);
+    console.error('❌ 로그인 오류:', error);
     res.status(500).json({ message: '서버 오류가 발생했습니다.' });
   }
 });
