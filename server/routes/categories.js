@@ -11,10 +11,22 @@ router.use(authenticateToken);
 // 카테고리 목록 조회
 router.get('/', async (req, res) => {
   try {
-    const categories = await Category.findAll({
+    let categories = await Category.findAll({
       where: { userId: req.user.id },
       order: [['createdAt', 'ASC']]
     });
+    
+    // 기본 카테고리가 없으면 생성
+    const hasDefaultCategory = categories.some(cat => cat.name === '기본');
+    if (!hasDefaultCategory) {
+      console.log('📁 기본 카테고리 생성 (기존 사용자용)');
+      const defaultCategory = await Category.create({
+        name: '기본',
+        color: '#6c757d',
+        userId: req.user.id
+      });
+      categories.unshift(defaultCategory); // 맨 앞에 추가
+    }
     
     res.json(categories);
   } catch (error) {
