@@ -202,13 +202,13 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <header className="bg-white/80 backdrop-blur-md shadow-lg border-b border-white/20 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-6 md:px-8">
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+        <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 md:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-lg">📝</span>
               </div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
                 秀메모
               </h1>
             </div>
@@ -221,35 +221,37 @@ function AppContent() {
               )}
               {isAuthenticated ? (
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 rounded-xl border border-blue-200">
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-xl border border-blue-200">
                     <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
                       <span className="text-white text-sm font-bold">
                         {user?.username?.charAt(0).toUpperCase()}
                       </span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-gray-800 font-semibold text-sm">
+                      <span className="text-gray-800 font-semibold text-sm whitespace-nowrap">
                         {user?.username}님
                       </span>
-                      <span className="text-gray-500 text-xs">
+                      <span className="text-gray-500 text-xs hidden sm:block">
                         안녕하세요!
                       </span>
                     </div>
                   </div>
                   <button 
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                     onClick={createNewMemo}
                   >
-                    <span className="flex items-center gap-2">
+                    <span className="flex items-center gap-1 sm:gap-2">
                       <span>+</span>
-                      새 메모
+                      <span className="hidden sm:inline">새 메모</span>
+                      <span className="sm:hidden">새</span>
                     </span>
                   </button>
                   <button 
-                    className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-4 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                     onClick={logout}
                   >
-                    로그아웃
+                    <span className="hidden sm:inline">로그아웃</span>
+                    <span className="sm:hidden">나가기</span>
                   </button>
                 </div>
               ) : (
@@ -291,7 +293,7 @@ function AppContent() {
             <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
               <span className="text-5xl">📝</span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">秀메모에 오신 것을 환영합니다!</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Welcome to 秀메모!</h2>
             <p className="text-gray-600 mb-8 text-lg">
               로그인하여 개인 메모를 작성하고 관리해보세요.
             </p>
