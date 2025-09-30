@@ -10,44 +10,58 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
+    
+    console.log('📝 회원가입 요청:', { username, email, passwordLength: password?.length });
 
     // 입력 검증
     if (!username || !email || !password) {
+      console.log('❌ 입력 검증 실패:', { username: !!username, email: !!email, password: !!password });
       return res.status(400).json({ message: '모든 필드를 입력해주세요.' });
     }
 
     // 중복 검사
+    console.log('🔍 중복 검사 시작');
     const existingUser = await User.findOne({
       where: {
         [Op.or]: [{ email }, { username }]
       }
     });
+    console.log('👤 중복 검사 결과:', { found: !!existingUser });
 
     if (existingUser) {
+      console.log('❌ 중복 사용자 발견:', { email, username });
       return res.status(400).json({ message: '이미 존재하는 이메일 또는 사용자명입니다.' });
     }
 
     // 사용자 생성
+    console.log('👤 사용자 생성 시작');
     const user = await User.create({
       username,
       email,
       password
     });
+    console.log('✅ 사용자 생성 완료:', { userId: user.id, username: user.username });
 
     // 기본 카테고리 생성
+    console.log('📁 기본 카테고리 생성 시작');
     const { Category } = require('../models');
     await Category.create({
       name: '기본',
       color: '#6c757d',
       userId: user.id
     });
+    console.log('✅ 기본 카테고리 생성 완료');
 
     // JWT 토큰 생성
+    console.log('🔑 JWT 토큰 생성 시작');
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '7d' }
     );
+    console.log('✅ JWT 토큰 생성 완료');
+
+    console.log('🎉 회원가입 성공:', { userId: user.id, username: user.username });
 
     res.status(201).json({
       message: '회원가입이 완료되었습니다.',
@@ -59,7 +73,11 @@ router.post('/register', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('회원가입 오류:', error);
+    console.error('❌ 회원가입 오류:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     res.status(500).json({ message: '서버 오류가 발생했습니다.' });
   }
 });
