@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
         as: 'category',
         attributes: ['id', 'name', 'color']
       }],
-      order: [['updatedAt', 'DESC']]
+      order: [['order', 'ASC'], ['updatedAt', 'DESC']]
     });
     
     // 검색 필터링 (서버 사이드)
@@ -186,6 +186,42 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: '메모가 삭제되었습니다.' });
   } catch (error) {
     console.error('메모 삭제 오류:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+// 메모 순서 변경
+router.put('/reorder', async (req, res) => {
+  try {
+    const { memoIds } = req.body;
+    
+    if (!Array.isArray(memoIds)) {
+      return res.status(400).json({ message: '메모 ID 배열이 필요합니다.' });
+    }
+    
+    // 모든 메모가 해당 사용자의 것인지 확인
+    const memos = await Memo.findAll({
+      where: {
+        id: memoIds,
+        userId: req.user.id
+      }
+    });
+    
+    if (memos.length !== memoIds.length) {
+      return res.status(400).json({ message: '유효하지 않은 메모가 포함되어 있습니다.' });
+    }
+    
+    // 순서 업데이트
+    for (let i = 0; i < memoIds.length; i++) {
+      await Memo.update(
+        { order: i },
+        { where: { id: memoIds[i], userId: req.user.id } }
+      );
+    }
+    
+    res.json({ message: '메모 순서가 변경되었습니다.' });
+  } catch (error) {
+    console.error('메모 순서 변경 오류:', error);
     res.status(500).json({ message: '서버 오류가 발생했습니다.' });
   }
 });

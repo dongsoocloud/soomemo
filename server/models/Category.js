@@ -30,6 +30,11 @@ const Category = sequelize.define('Category', {
       model: 'Users',
       key: 'id'
     }
+  },
+  order: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0
   }
 }, {
   tableName: 'categories'

@@ -1,10 +1,95 @@
 import React, { useState } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import {
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+// SortableCategoryItem 컴포넌트
+const SortableCategoryItem = ({ category, isSelected, onSelect, onEdit, onDelete }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: category.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`flex items-center p-3 rounded-lg cursor-pointer transition-colors relative group ${
+        isSelected 
+          ? 'bg-blue-100 border border-blue-300' 
+          : 'hover:bg-gray-50'
+      }`}
+      onClick={() => onSelect(category.id)}
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="mr-2 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
+      >
+        ⋮⋮
+      </div>
+      <span 
+        className="w-3 h-3 rounded-full mr-3 flex-shrink-0" 
+        style={{ backgroundColor: category.color }}
+      ></span>
+      <span className="text-sm text-gray-700 flex-1">{category.name}</span>
+      {category.id !== 'default' && (
+        <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
+          <button 
+            className="bg-blue-100 hover:bg-blue-200 text-blue-600 rounded p-1 text-xs transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(category.id);
+            }}
+          >
+            ✏️
+          </button>
+          <button 
+            className="bg-red-100 hover:bg-red-200 text-red-600 rounded p-1 text-xs transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(category.id);
+            }}
+          >
+            🗑️
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CategorySidebar = ({ 
   categories, 
   selectedCategory, 
   onCategorySelect, 
-  onAddCategory, 
+  onAddCategory,
+  onReorderCategories, 
   onUpdateCategory, 
   onDeleteCategory 
 }) => {
@@ -38,6 +123,25 @@ const CategorySidebar = ({
     '#6f42c1', '#e83e8c', '#fd7e14', '#20c997', '#6c757d'
   ];
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      const oldIndex = categories.findIndex(category => category.id === active.id);
+      const newIndex = categories.findIndex(category => category.id === over.id);
+      
+      const newCategories = arrayMove(categories, oldIndex, newIndex);
+      onReorderCategories(newCategories.map(cat => cat.id));
+    }
+  };
+
   return (
     <div className="w-72 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 flex flex-col h-fit max-h-[80vh] overflow-y-auto">
       <div className="flex justify-between items-center p-6 border-b border-gray-100/50 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 rounded-t-2xl">
@@ -70,9 +174,15 @@ const CategorySidebar = ({
           <span className="text-sm font-medium">전체</span>
         </div>
 
-        {categories.map(category => (
-          <div key={category.id} className="mb-1">
-            {editingCategory === category.id ? (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext items={categories.map(cat => cat.id)} strategy={verticalListSortingStrategy}>
+            {categories.map(category => (
+              <div key={category.id} className="mb-1">
+                {editingCategory === category.id ? (
               <div className="p-3 bg-gray-50 rounded-lg mb-2">
                 <input
                   type="text"
@@ -115,55 +225,22 @@ const CategorySidebar = ({
                 </div>
               </div>
             ) : (
-              <div 
-                className={`flex items-center p-3 rounded-lg cursor-pointer transition-colors relative group ${
-                  selectedCategory === category.id 
-                    ? 'bg-blue-100 border border-blue-300' 
-                    : 'hover:bg-gray-50'
-                }`}
-                onClick={() => onCategorySelect(category.id)}
-              >
-                <span 
-                  className="w-3 h-3 rounded-full mr-3 flex-shrink-0" 
-                  style={{ backgroundColor: category.color }}
-                ></span>
-                <span className="text-sm text-gray-700 flex-1">{category.name}</span>
-                {category.id !== 'default' && (
-                  <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity">
-                    <button 
-                      className="bg-blue-100 hover:bg-blue-200 text-blue-600 rounded p-1 text-xs transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingCategory(category.id);
-                        setNewCategoryName(category.name);
-                        setNewCategoryColor(category.color);
-                      }}
-                    >
-                      ✏️
-                    </button>
-                    <button 
-                      className={`rounded p-1 text-xs transition-colors ${
-                        category.name === '기본' 
-                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                          : 'bg-red-100 hover:bg-red-200 text-red-600'
-                      }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (category.name !== '기본') {
-                          handleDeleteCategory(category.id);
-                        }
-                      }}
-                      disabled={category.name === '기본'}
-                      title={category.name === '기본' ? '기본 카테고리는 삭제할 수 없습니다' : '삭제'}
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                )}
-              </div>
+              <SortableCategoryItem
+                category={category}
+                isSelected={selectedCategory === category.id}
+                onSelect={onCategorySelect}
+                onEdit={(id) => {
+                  setEditingCategory(id);
+                  setNewCategoryName(category.name);
+                  setNewCategoryColor(category.color);
+                }}
+                onDelete={handleDeleteCategory}
+              />
             )}
           </div>
         ))}
+          </SortableContext>
+        </DndContext>
 
         {isAddingCategory && (
           <div className="p-3 bg-gray-50 rounded-lg mb-2">

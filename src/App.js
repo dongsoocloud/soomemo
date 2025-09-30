@@ -178,6 +178,20 @@ function AppContent() {
     }
   };
 
+  const reorderCategories = async (categoryIds) => {
+    try {
+      await categoryAPI.reorderCategories(categoryIds);
+      // 로컬 상태 업데이트
+      const reorderedCategories = categoryIds.map(id => 
+        categories.find(cat => cat.id === id)
+      ).filter(Boolean);
+      setCategories(reorderedCategories);
+    } catch (error) {
+      console.error('카테고리 순서 변경 오류:', error);
+      alert(`카테고리 순서 변경에 실패했습니다: ${error.message}`);
+    }
+  };
+
   const handleAuthSuccess = (userData) => {
     setShowAuthModal(false);
     // 인증 성공 후 데이터 다시 로드
@@ -286,6 +300,7 @@ function AppContent() {
               onAddCategory={addCategory}
               onUpdateCategory={updateCategory}
               onDeleteCategory={deleteCategory}
+              onReorderCategories={reorderCategories}
             />
           </div>
           

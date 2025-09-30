@@ -36,6 +36,11 @@ const Memo = sequelize.define('Memo', {
       model: 'Categories',
       key: 'id'
     }
+  },
+  order: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0
   }
 }, {
   tableName: 'memos'

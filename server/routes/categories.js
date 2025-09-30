@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   try {
     let categories = await Category.findAll({
       where: { userId: req.user.id },
-      order: [['createdAt', 'ASC']]
+      order: [['order', 'ASC'], ['createdAt', 'ASC']]
     });
     
     // 기본 카테고리가 없으면 생성
@@ -111,6 +111,42 @@ router.put('/:id', async (req, res) => {
     res.json(category);
   } catch (error) {
     console.error('카테고리 수정 오류:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+// 카테고리 순서 변경
+router.put('/reorder', async (req, res) => {
+  try {
+    const { categoryIds } = req.body;
+    
+    if (!Array.isArray(categoryIds)) {
+      return res.status(400).json({ message: '카테고리 ID 배열이 필요합니다.' });
+    }
+    
+    // 모든 카테고리가 해당 사용자의 것인지 확인
+    const categories = await Category.findAll({
+      where: {
+        id: categoryIds,
+        userId: req.user.id
+      }
+    });
+    
+    if (categories.length !== categoryIds.length) {
+      return res.status(400).json({ message: '유효하지 않은 카테고리가 포함되어 있습니다.' });
+    }
+    
+    // 순서 업데이트
+    for (let i = 0; i < categoryIds.length; i++) {
+      await Category.update(
+        { order: i },
+        { where: { id: categoryIds[i], userId: req.user.id } }
+      );
+    }
+    
+    res.json({ message: '카테고리 순서가 변경되었습니다.' });
+  } catch (error) {
+    console.error('카테고리 순서 변경 오류:', error);
     res.status(500).json({ message: '서버 오류가 발생했습니다.' });
   }
 });

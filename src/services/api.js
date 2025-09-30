@@ -127,4 +127,10 @@ export const categoryAPI = {
     apiRequest(`/categories/${id}`, {
       method: 'DELETE',
     }),
+
+  reorderCategories: (categoryIds) =>
+    apiRequest('/categories/reorder', {
+      method: 'PUT',
+      body: JSON.stringify({ categoryIds }),
+    }),
 };
