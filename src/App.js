@@ -6,6 +6,7 @@ import CategorySidebar from './components/CategorySidebar';
 import SearchBar from './components/SearchBar';
 import Modal from './components/Modal';
 import AuthModal from './components/AuthModal';
+import MobileBottomNav from './components/MobileBottomNav';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { memoAPI, categoryAPI } from './services/api';
 
@@ -236,23 +237,24 @@ function AppContent() {
                       </span>
                     </div>
                   </div>
-                  <button 
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
-                    onClick={createNewMemo}
-                  >
-                    <span className="flex items-center gap-1 sm:gap-2">
-                      <span>+</span>
-                      <span className="hidden sm:inline">새 메모</span>
-                      <span className="sm:hidden">새</span>
-                    </span>
-                  </button>
-                  <button 
-                    className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
-                    onClick={logout}
-                  >
-                    <span className="hidden sm:inline">로그아웃</span>
-                    <span className="sm:hidden">나가기</span>
-                  </button>
+                  {/* 데스크톱에서만 버튼 표시 */}
+                  <div className="hidden sm:flex items-center gap-4">
+                    <button 
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                      onClick={createNewMemo}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span>+</span>
+                        새 메모
+                      </span>
+                    </button>
+                    <button 
+                      className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                      onClick={logout}
+                    >
+                      로그아웃
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <button 
@@ -268,7 +270,7 @@ function AppContent() {
       </header>
       
       {isAuthenticated ? (
-        <div className="max-w-7xl mx-auto px-4 py-8 md:px-8 flex flex-col lg:flex-row gap-6 min-h-[calc(100vh-80px)]">
+        <div className="max-w-7xl mx-auto px-4 py-8 md:px-8 flex flex-col lg:flex-row gap-6 min-h-[calc(100vh-80px)] pb-20 sm:pb-8">
           <CategorySidebar
             categories={categories}
             selectedCategory={selectedCategory}
@@ -326,6 +328,13 @@ function AppContent() {
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         onAuthSuccess={handleAuthSuccess}
+      />
+
+      {/* 모바일 하단 네비게이션 바 */}
+      <MobileBottomNav 
+        onCreateMemo={createNewMemo}
+        onLogout={logout}
+        isAuthenticated={isAuthenticated}
       />
     </div>
   );
