@@ -86,8 +86,45 @@ router.post('/register', async (req, res) => {
     
     // 더 구체적인 오류 메시지 제공
     if (error.name === 'SequelizeValidationError') {
-      return res.status(400).json({ message: '입력 데이터가 올바르지 않습니다.' });
+      const validationErrors = error.errors.map(err => {
+        const field = err.path;
+        const message = err.message;
+        
+        // 필드별 구체적인 오류 메시지
+        if (field === 'username') {
+          if (message.includes('len')) {
+            return '사용자명은 3자 이상 20자 이하여야 합니다.';
+          } else if (message.includes('notEmpty')) {
+            return '사용자명을 입력해주세요.';
+          }
+        } else if (field === 'email') {
+          if (message.includes('isEmail')) {
+            return '올바른 이메일 형식을 입력해주세요.';
+          } else if (message.includes('notEmpty')) {
+            return '이메일을 입력해주세요.';
+          }
+        } else if (field === 'password') {
+          if (message.includes('len')) {
+            return '비밀번호는 6자 이상 100자 이하여야 합니다.';
+          } else if (message.includes('notEmpty')) {
+            return '비밀번호를 입력해주세요.';
+          }
+        }
+        
+        return `${field}: ${message}`;
+      });
+      
+      return res.status(400).json({ 
+        message: '입력 데이터가 올바르지 않습니다.',
+        errors: validationErrors
+      });
     } else if (error.name === 'SequelizeUniqueConstraintError') {
+      const field = error.errors[0]?.path;
+      if (field === 'email') {
+        return res.status(400).json({ message: '이미 존재하는 이메일입니다.' });
+      } else if (field === 'username') {
+        return res.status(400).json({ message: '이미 존재하는 사용자명입니다.' });
+      }
       return res.status(400).json({ message: '이미 존재하는 이메일 또는 사용자명입니다.' });
     } else if (error.name === 'SequelizeConnectionError') {
       return res.status(500).json({ message: '데이터베이스 연결 오류가 발생했습니다.' });

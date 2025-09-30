@@ -57,12 +57,31 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (username, email, password) => {
     try {
+      console.log('📝 회원가입 시도:', { username, email });
       const data = await authAPI.register(username, email, password);
+      console.log('✅ 회원가입 성공:', data);
+      
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       setUser(data.user);
       return data;
     } catch (error) {
+      console.error('❌ 회원가입 실패:', error);
+      
+      // 서버에서 받은 오류 응답 처리
+      if (error.response && error.response.data) {
+        const serverError = error.response.data;
+        if (serverError.errors && Array.isArray(serverError.errors)) {
+          // 유효성 검사 오류
+          const validationError = new Error(serverError.message);
+          validationError.errors = serverError.errors;
+          throw validationError;
+        } else if (serverError.message) {
+          // 일반적인 서버 오류
+          throw new Error(serverError.message);
+        }
+      }
+      
       throw error;
     }
   };

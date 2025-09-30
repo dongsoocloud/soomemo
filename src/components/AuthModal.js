@@ -42,7 +42,17 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess }) => {
       alert(isLogin ? '로그인이 완료되었습니다!' : '회원가입이 완료되었습니다!');
     } catch (error) {
       console.error('인증 오류:', error);
-      setError(error.message || '서버 연결 오류가 발생했습니다. 서버가 실행 중인지 확인해주세요.');
+      
+      // 구체적인 오류 메시지 처리
+      if (error.errors && Array.isArray(error.errors)) {
+        // 유효성 검사 오류 (여러 필드)
+        setError(error.errors.join(', '));
+      } else if (error.message) {
+        // 일반적인 오류 메시지
+        setError(error.message);
+      } else {
+        setError('서버 연결 오류가 발생했습니다. 서버가 실행 중인지 확인해주세요.');
+      }
     } finally {
       setLoading(false);
     }
