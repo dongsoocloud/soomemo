@@ -54,9 +54,12 @@ router.post('/register', async (req, res) => {
 
     // JWT 토큰 생성
     console.log('🔑 JWT 토큰 생성 시작');
+    const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
+    console.log('🔑 JWT_SECRET 설정 상태:', process.env.JWT_SECRET ? '환경변수 설정됨' : '기본값 사용');
+    
     const token = jwt.sign(
       { userId: user.id, username: user.username },
-      process.env.JWT_SECRET || 'your-secret-key',
+      jwtSecret,
       { expiresIn: '7d' }
     );
     console.log('✅ JWT 토큰 생성 완료');
@@ -76,8 +79,20 @@ router.post('/register', async (req, res) => {
     console.error('❌ 회원가입 오류:', {
       message: error.message,
       stack: error.stack,
-      name: error.name
+      name: error.name,
+      code: error.code,
+      parent: error.parent?.message
     });
+    
+    // 더 구체적인 오류 메시지 제공
+    if (error.name === 'SequelizeValidationError') {
+      return res.status(400).json({ message: '입력 데이터가 올바르지 않습니다.' });
+    } else if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(400).json({ message: '이미 존재하는 이메일 또는 사용자명입니다.' });
+    } else if (error.name === 'SequelizeConnectionError') {
+      return res.status(500).json({ message: '데이터베이스 연결 오류가 발생했습니다.' });
+    }
+    
     res.status(500).json({ message: '서버 오류가 발생했습니다.' });
   }
 });
