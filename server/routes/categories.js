@@ -120,6 +120,8 @@ router.put('/reorder', async (req, res) => {
   try {
     const { categoryIds } = req.body;
     
+    console.log('🔄 카테고리 순서 변경 요청:', { categoryIds, userId: req.user.id });
+    
     if (!Array.isArray(categoryIds)) {
       return res.status(400).json({ message: '카테고리 ID 배열이 필요합니다.' });
     }
@@ -131,6 +133,8 @@ router.put('/reorder', async (req, res) => {
         userId: req.user.id
       }
     });
+    
+    console.log('📋 찾은 카테고리들:', categories.map(c => ({ id: c.id, name: c.name })));
     
     if (categories.length !== categoryIds.length) {
       return res.status(400).json({ message: '유효하지 않은 카테고리가 포함되어 있습니다.' });
@@ -144,9 +148,14 @@ router.put('/reorder', async (req, res) => {
       );
     }
     
+    console.log('✅ 카테고리 순서 변경 완료');
     res.json({ message: '카테고리 순서가 변경되었습니다.' });
   } catch (error) {
-    console.error('카테고리 순서 변경 오류:', error);
+    console.error('❌ 카테고리 순서 변경 오류:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     res.status(500).json({ message: '서버 오류가 발생했습니다.' });
   }
 });
