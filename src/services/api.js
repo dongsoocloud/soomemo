@@ -1,4 +1,6 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://soomemo-production.up.railway.app/api'
+  : 'http://localhost:5000/api';
 
 // 토큰 가져오기
 const getToken = () => localStorage.getItem('token');
