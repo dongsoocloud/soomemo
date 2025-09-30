@@ -39,18 +39,46 @@ const syncDatabase = async () => {
       console.log('✅ 기존 테이블 삭제 완료');
     }
     
-    // 순차적으로 테이블 동기화 (외래키 의존성 고려)
-    console.log('👤 Users 테이블 동기화...');
-    await User.sync({ force: false });
-    console.log('✅ Users 테이블 동기화 완료');
+    // 원시 SQL로 테이블 생성 (외래키 의존성 고려)
+    console.log('👤 Users 테이블 생성...');
+    await sequelize.query(`
+      CREATE TABLE IF NOT EXISTS "Users" (
+        "id" SERIAL PRIMARY KEY,
+        "username" VARCHAR(255) NOT NULL UNIQUE,
+        "email" VARCHAR(255) NOT NULL UNIQUE,
+        "password" VARCHAR(255) NOT NULL,
+        "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+        "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+      );
+    `);
+    console.log('✅ Users 테이블 생성 완료');
     
-    console.log('📁 Categories 테이블 동기화...');
-    await Category.sync({ force: false });
-    console.log('✅ Categories 테이블 동기화 완료');
+    console.log('📁 Categories 테이블 생성...');
+    await sequelize.query(`
+      CREATE TABLE IF NOT EXISTS "Categories" (
+        "id" SERIAL PRIMARY KEY,
+        "name" VARCHAR(255) NOT NULL,
+        "color" VARCHAR(255) NOT NULL DEFAULT '#6c757d',
+        "user_id" INTEGER NOT NULL REFERENCES "Users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+        "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+        "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+      );
+    `);
+    console.log('✅ Categories 테이블 생성 완료');
     
-    console.log('📝 Memos 테이블 동기화...');
-    await Memo.sync({ force: false });
-    console.log('✅ Memos 테이블 동기화 완료');
+    console.log('📝 Memos 테이블 생성...');
+    await sequelize.query(`
+      CREATE TABLE IF NOT EXISTS "Memos" (
+        "id" SERIAL PRIMARY KEY,
+        "title" VARCHAR(255) NOT NULL,
+        "content" TEXT NOT NULL,
+        "user_id" INTEGER NOT NULL REFERENCES "Users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+        "category_id" INTEGER NOT NULL REFERENCES "Categories" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+        "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+        "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+      );
+    `);
+    console.log('✅ Memos 테이블 생성 완료');
     
     console.log('✅ 데이터베이스가 성공적으로 동기화되었습니다.');
     
